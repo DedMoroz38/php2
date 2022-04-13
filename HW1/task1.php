@@ -3,7 +3,6 @@ class Transport
 {
     private $name; //НУЖНО ЛИ ЭТО?
     private $fuelAamount;
-    private $fuelAamount;
 
     public function __construct($name = null, $fuelAmount = null)
     {
@@ -16,9 +15,6 @@ class Transport
     }
     public function start(){
         echo "Engin is started!<br>";
-    }
-    public function start(){
-        echo "Engin is off!<br>";
     }
     
 }
@@ -50,11 +46,18 @@ class AirPlane extends Transport{
 }
 
 $car = new Car("Mersedes", 20);
-$car->start();
-$car->info();
+// $car->start();
+// $car->info();
 
 
 
 $plane = new AirPlane("Embraer", 1000);
-$plane->start();
-$plane->info();
+// $plane->start();
+// $plane->info();
+
+function displayInfo(Transport $unit){
+    $unit->info();  
+}
+
+displayInfo($car);
+displayInfo($plane);
