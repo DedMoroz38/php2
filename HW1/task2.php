@@ -1,37 +1,34 @@
 <?php
 class DB {
     protected $tableName;
-    protected $andWheres = [];
-    protected $where = [];
+    protected $wheres = [];
 
     public function table($tableName){
         $this->tableName = $tableName;
         return $this;
     }
-    public function andWhere($field, $value){
-        $this->andWheres[] = [
+    
+
+    public function where($field, $value){
+        $this->wheres[] = [
             'field' => $field,
             'value' => $value
         ];
         return $this;
     }
 
-    public function where($field, $value){
-        $this->where[] = [
-            $field,
-            $value
-        ];
-        return $this;
+    public function andWhere($field, $value){
+        return $this->where($field, $value);
     }
 
     public function getAll(){
-        $sql = "SELECT * FROM `$this->tableName`";
-        if(!empty($this->where)){
-            $sql .= " WHERE " . $this->where[0][0] . " = `" . $this->where[0][1] . "`"; 
-        }
-        if (!empty($this->andWheres)) {
-            foreach ($this->andWheres as $value) {
-                $sql .= " AND " . $value['field'] . " = " . $value['value'];
+        $sql = "SELECT * FROM `$this->tableName`";      
+        $sql .= " WHERE ";
+
+        if(!empty($this->wheres)){
+            foreach ($this->wheres as $value) {
+                $sql .= $value["field"] . " = " . $value["value"];
+                if ($value != end($this->wheres)) $sql .= " AND ";
             }
         }
 
