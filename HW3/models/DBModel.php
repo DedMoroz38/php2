@@ -2,10 +2,9 @@
 namespace app\models;
 
 use app\engine\DB;
-use app\interfaces\IModel;
 
 
-abstract class Model implements IModel
+abstract class DBModel extends Model
 {
     public function insert(){
         $variables = '';
@@ -28,7 +27,7 @@ abstract class Model implements IModel
         }
         
 
-        $sql = "INSERT INTO `{$this->getTableName()}` ($variables) VALUES ($values)";
+        $sql = "INSERT INTO `{static::getTableName()}` ($variables) VALUES ($values)";
         DB::getInstance()->execute($sql, $params);
         $this->id = Db::getInstance()->lastInsertId();
         return $this;
@@ -38,13 +37,20 @@ abstract class Model implements IModel
         $sql = "DELETE FROM `{$this->getTableName()}` WHERE `id` = :id";
         return DB::getInstance()->execute($sql, ['id' => $this->id]);
     }
-    public function getOne(int $id){
-        $sql = "SELECT * FROM `{$this->getTableName()}` WHERE `id` = :id";
+    public static function getOne(int $id){
+        $tableName = static::getTableName();
+        $sql = "SELECT * FROM `{$tableName}` WHERE `id` = :id";
         return DB::getInstance()->queryOneObject($sql, ['id' => $id], static::class);
     }
-    public function getAll(){
-        $sql = "SELECT * FROM `{$this->getTableName()}`";
+    public static function getAll(){
+        $tableName = static::getTableName();
+        $sql = "SELECT * FROM `{$tableName}`";
         return DB::getInstance()->queryAll($sql);
     }
-    public abstract function getTableName();
+    public static function getLimit($limit, $offset){
+        $tableName = static::getTableName();
+        $sql = "SELECT * FROM `{$tableName}` LIMIT $limit OFFSET $offset";
+        return DB::getInstance()->queryAll($sql);
+    }
+    public abstract static function getTableName();
 }

@@ -2,7 +2,7 @@
 namespace app\models;
 
 
-class Orders extends Model
+class Orders extends DBModel
 {
     public $id;
     public $userId;
@@ -20,7 +20,7 @@ class Orders extends Model
         $this->cartRefId = $cartRefId;
     }
 
-    public function getTableName(){
+    public static function getTableName(){
         return "orders";
     }
 }
