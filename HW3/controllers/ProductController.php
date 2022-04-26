@@ -7,7 +7,7 @@ class ProductController extends Controller
 {
     protected function actionCatalog()
     {
-        $page = $_GET['page'] ?? 0;
+        $page = $_GET['page'] ?? 1;
         $catalog = CatalogItems::getLimit(2, $page * 2 - 2);
         echo $this->render('product/catalog', [
             "catalog" => $catalog,
