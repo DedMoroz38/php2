@@ -7,32 +7,52 @@ use app\engine\DB;
 abstract class DBModel extends Model
 {
     public function insert(){
-        $variables = '';
-        $values = '';
+        $variables = [];
         $params = [];
-        foreach($this as $key => $value){
-            if ($key === "id"){
-                continue;
-            } else {
-                $params[$key] = $value;
-                $variables .= "`$key`";
-                $values .= ":$key";
-                if (end($this) == $value) {
-                    continue;
-                } else {
-                    $variables .= ", ";
-                    $values .= ", ";
-                }
-            }
+        foreach($this->props as $key => $value){
+            $variables[] = $key;
+            $params[":" . $key] = $this->$key;
         }
-        
+        $variables = implode(", ", $variables);
+        $values = implode(', ', array_keys($params));
+        $tableName = static::getTableName();
 
-        $sql = "INSERT INTO `{static::getTableName()}` ($variables) VALUES ($values)";
+        $sql = "INSERT INTO `$tableName` ($variables) VALUES ($values)";
         DB::getInstance()->execute($sql, $params);
         $this->id = Db::getInstance()->lastInsertId();
         return $this;
 
     }
+
+    public function update(){
+        $variables = [];
+        $params = [];
+        foreach($this->props as $key => $value){
+            if(!$value) continue;
+
+
+            $params[":" . $key] = $this->$key;
+            $variables[] = "`$key`" . " = :" . "$key";
+
+            $this->props[$key] = false;
+        }
+        $variables = implode(", ", $variables);
+
+        $tableName = static::getTableName();
+
+        $sql = "UPDATE `$tableName` SET $variables WHERE `id` = $this->id";
+        DB::getInstance()->execute($sql, $params);
+        return $this;
+    }
+
+    public function save(){
+        if(is_null($this->id)){
+            $this->insert();
+        } else {
+            $this->update();
+        }
+    }
+
     public function delete(){
         $sql = "DELETE FROM `{$this->getTableName()}` WHERE `id` = :id";
         return DB::getInstance()->execute($sql, ['id' => $this->id]);

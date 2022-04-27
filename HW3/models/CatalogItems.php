@@ -4,11 +4,18 @@ namespace app\models;
 
 class CatalogItems extends DBModel 
 {
-    public $id;
-    public $name;
-    public $image;
-    public $description;
-    public $price;
+    protected $id;
+    protected $name;
+    protected $image;
+    protected $description;
+    protected $price;
+
+    protected $props = [
+        'name' => false,
+        'image' => false,
+        'description' => false,
+        'price' => false
+    ];
 
     public function __construct($name = null, $image = null, $description = null, $price = null)
     {

@@ -1,0 +1,9 @@
+<h2>Товар</h2>
+
+<div>
+    <img src="data:image/jpeg;base64, <?= base64_encode($product->image) ?>" alt="image">
+    <h3>{{ item.name }}</h3>
+    <p>{{ item.description }}</p>
+    <p>price: {{ item.price }}</p>
+    <button>Купить</button>
+</div>

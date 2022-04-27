@@ -4,10 +4,16 @@ namespace app\models;
 
 class Cart extends DBModel 
 {
-    public $id;
-    public $userId;
-    public $itemId;
-    public $orderId;
+    protected $id;
+    protected $userId;
+    protected $itemId;
+    protected $orderId;
+
+    protected $props = [
+        'userId' => false,
+        'itemId' => false,
+        'orderId' => false
+    ];
 
     public function __construct($userId = null, $itemId = null, $orderId = null)
     {

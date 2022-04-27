@@ -1,14 +1,22 @@
 <?php 
 
 namespace app\controllers;
+use app\engine\Render;
+use app\interfaces\IRender;
 
 abstract class Controller
 {
     private $action;
     private $defaultAction = "index";
 
+    public function __construct(IRender $render)
+    {
+        $this->render = $render;
+    }
+
+
     public function runAction($action)
-    {  
+    {
         $this->action = $action ?: $this->defaultAction;
         $method = 'action' . ucfirst($this->action);
         if (method_exists($this, $method)){
@@ -24,14 +32,10 @@ abstract class Controller
             'menu' => $this->renderTemplate('menu', $params),
             'content' => $this->renderTemplate($template, $params)
         ]);
-
     }
-
-    public function renderTemplate($template, $params = [])
+    public function renderTemplate($template, $params)
     {
-        ob_start();
-        extract($params);
-        include "../views/" . $template . ".php";
-        return ob_get_clean();
+         return $this->render->renderTemplate($template, $params);
     }
+
 }

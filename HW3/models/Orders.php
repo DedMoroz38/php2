@@ -4,12 +4,20 @@ namespace app\models;
 
 class Orders extends DBModel
 {
-    public $id;
-    public $userId;
-    public $address;
-    public $city;
-    public $zip;
-    public $cartRefId
+    protected $id;
+    protected $userId;
+    protected $address;
+    protected $city;
+    protected $zip;
+    protected $cartRefId;
+
+    protected $props = [
+        'userId' => false,
+        'address' => false,
+        'city' => false,
+        'zip' => false,
+        'cartRefId' => false
+    ];
 
     public function __construct($userId = null, $address = null, $city = null, $zip = null, $cartRefId = null)
     {
