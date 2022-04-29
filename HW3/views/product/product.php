@@ -5,5 +5,5 @@
     <h3><?=$product->name?></h3>
     <p><?=$product->description?></p>
     <p>price: <?=$product->price?></p>
-    <button>Купить</button>
+    <a href="/product/add">Add to basket</a>
 </div>

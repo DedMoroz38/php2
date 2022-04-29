@@ -1,8 +1,9 @@
 <?php
 include "../engine/Autoload.php";
+session_start();
 
 use app\models\{Cart, User, CatalogItems, Orders};
-use app\engine\{DB,Render, TwigRender};
+use app\engine\{DB,Render, Request};
 use app\interfaces\IModel;
 include "../config/config.php";
 
@@ -11,14 +12,18 @@ spl_autoload_register([new Autoload(), "loadClass"]);
 require_once "../vendor/autoload.php";
 
 
- $controllerName = $_GET["c"] ?: "index";
- $actionName = $_GET["a"];
+
+$request = new Request();
+
+$controllerName = $request->getControllerName() ?: 'index';
+$actionName = $request->getActionName();
+
+
 
  $controllerClass = CONTROLLER_NAMESPACE. ucfirst($controllerName) . "Controller";
 
-
  if(class_exists($controllerClass)){
-     $controller = new $controllerClass(new TwigRender());
+     $controller = new $controllerClass(new Render());
      $controller->runAction($actionName);
  } else {
      die("No such class");

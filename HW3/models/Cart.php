@@ -2,7 +2,9 @@
 namespace app\models;
 
 
-class Cart extends DBModel 
+use app\engine\DB;
+
+class Cart extends DBModel
 {
     protected $id;
     protected $userId;
@@ -10,18 +12,23 @@ class Cart extends DBModel
     protected $orderId;
 
     protected $props = [
-        'userId' => false,
+        'sessionId' => false,
         'itemId' => false,
         'orderId' => false
     ];
 
-    public function __construct($userId = null, $itemId = null, $orderId = null)
+    public function __construct($sessionId = null, $itemId = null, $orderId = null)
     {
-        $this->userId = $userId;
+        $this->sessionId = $sessionId;
         $this->itemId = $itemId;
         $this->orderId = $orderId;
     }
-
+    public function getCart($session_id){
+        $sql = "SELECT cart.id as cart_id, name, image, description, price FROM `cart`,
+                            `catalogItems` WHERE `sessionId` = :sessionId AND cart.itemId = catalogItems.id;";
+        DB::getInstance()->queryAll($sql, ["sessionId" => $session_id]);
+        return DB::getInstance()->queryAll($sql, ["sessionId" => $session_id]);
+    }
     public static function getTableName(){
         return "cart";
     }

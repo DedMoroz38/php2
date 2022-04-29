@@ -2,7 +2,6 @@
 namespace app\models;
 
 
-
 class User extends DBModel
 {
 
@@ -22,6 +21,25 @@ class User extends DBModel
         $this->login = $login;
         $this->password = $password;
         $this->hash = $hash;
+    }
+    public static function Auth($login, $password){
+        $user = User::getWhere('login', $login);
+        if($password == $user->password){
+            $_SESSION["login"] = $login;
+            return true;
+        } else {
+             return false;
+        }
+    }
+
+    public static function isAuth()
+    {
+        return isset($_SESSION["login"]);
+    }
+
+    public static function getName()
+    {
+        return $_SESSION["login"];
     }
 
     public static function getTableName(){

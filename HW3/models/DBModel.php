@@ -52,6 +52,23 @@ abstract class DBModel extends Model
             $this->update();
         }
     }
+    public static function getWhere($name, $value){
+        $tableName = static::getTableName();
+        $sql = "SELECT * FROM `{$tableName}` WHERE `{$name}` = :value";
+        return DB::getInstance()->queryOneObject($sql, ['value' => $value], static::class);
+    }
+
+    public static function getCountWhere($name, $value) {
+        $tableName = static::getTableName();
+        $sql = "SELECT count(id) as count FROM {$tableName} WHERE {$name} = :value";
+        return Db::getInstance()->queryOne($sql, ['value' => $value])['count'];
+    }
+
+    public static function staticDelete($id){
+        $tableName = static::getTableName();
+        $sql = "DELETE FROM `{$tableName}` WHERE `id` = :id";
+        return DB::getInstance()->execute($sql, ['id' => $id]);
+    }
 
     public function delete(){
         $sql = "DELETE FROM `{$this->getTableName()}` WHERE `id` = :id";
