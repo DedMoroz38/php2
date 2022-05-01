@@ -1,10 +1,10 @@
 <?php 
 
 namespace app\controllers;
-use app\engine\Render;
 use app\interfaces\IRender;
-use app\models\Cart;
-use app\models\User;
+use app\models\repositories\UserRepository;
+use app\models\repositories\CartRepository;
+
 
 abstract class Controller
 {
@@ -32,9 +32,9 @@ abstract class Controller
     {
         return $this->renderTemplate('layouts/main', [
             'menu' => $this->renderTemplate('menu', [
-                "userName" => User::getName(),
-                "isAuth" => User::isAuth(),
-                "count" => Cart::getCountWhere("sessionId", session_id())
+                "userName" => (new UserRepository())->getName(),
+                "isAuth" => (new UserRepository())->isAuth(),
+                "count" => (new CartRepository())->getCountWhere("sessionId", session_id())
             ]),
             'content' => $this->renderTemplate($template, $params)
         ]);
