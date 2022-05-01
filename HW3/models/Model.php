@@ -2,10 +2,10 @@
 namespace app\models;
 
 use app\engine\DB;
-use app\interfaces\IModel;
+use app\interfaces\IRepository;
 
 
-abstract class Model implements IModel
+abstract class Model
 {
     protected $props = [];
 

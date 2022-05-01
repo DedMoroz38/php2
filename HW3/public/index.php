@@ -1,33 +1,33 @@
 <?php
-include "../engine/Autoload.php";
 session_start();
 
-use app\models\{Cart, User, CatalogItems, Orders};
-use app\engine\{DB,Render, Request};
-use app\interfaces\IModel;
+use app\engine\{Render, Request};
 include "../config/config.php";
-
-
-spl_autoload_register([new Autoload(), "loadClass"]);
+//include "../engine/Autoload.php";
+//spl_autoload_register([new Autoload(), "loadClass"]);
 require_once "../vendor/autoload.php";
 
 
+try {
+    $request = new Request();
 
-$request = new Request();
-
-$controllerName = $request->getControllerName() ?: 'index';
-$actionName = $request->getActionName();
+    $controllerName = $request->getControllerName() ?: 'index';
+    $actionName = $request->getActionName();
 
 
+    $controllerClass = CONTROLLER_NAMESPACE . ucfirst($controllerName) . "Controller";
 
- $controllerClass = CONTROLLER_NAMESPACE. ucfirst($controllerName) . "Controller";
-
- if(class_exists($controllerClass)){
-     $controller = new $controllerClass(new Render());
-     $controller->runAction($actionName);
- } else {
-     die("No such class");
- }
+    if (class_exists($controllerClass)) {
+        $controller = new $controllerClass(new Render());
+        $controller->runAction($actionName);
+    } else {
+        die("No such class");
+    }
+} catch (PDOException $exception) {
+    var_dump($exception->getMessage());
+} catch (Exception $exception) {
+    var_dump($exception);
+}
 
 ////////////////////////////////////
 

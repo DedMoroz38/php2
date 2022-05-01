@@ -19,6 +19,7 @@ class DB
 
     private function getConnection()
     {
+        global $connection;
         if(is_null($connection)){
             $this->connection = new \PDO($this->prepareDsnString(),
             $this->config['login'],
@@ -47,7 +48,11 @@ class DB
     {
         $STH = $this->query($sql, $params);
         $STH->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $class);
-        return $STH->fetch();
+        $obj = $STH->fetch();
+        if (!$obj){
+            throw new \Exception("Product is not found", 404);
+        }
+        return $obj;
     }
 
     private function query($sql, $params){
@@ -58,7 +63,12 @@ class DB
 
     public function queryOne($sql, $params = [])
     {
-        return $this->query($sql, $params)->fetch();
+        $result = $this->query($sql, $params)->fetch();
+        $result =  $this->query($sql, $params)->rowCount();
+        if (!$result){
+            throw new \Exception("There was an error!!!", 404);
+        }
+        return $result;
     }
     public function queryAll($sql, $params = [])
     {
@@ -66,7 +76,11 @@ class DB
     }
     public function execute($sql, $params = [])
     {
-        return $this->query($sql, $params)->rowCount();
+        $result =  $this->query($sql, $params)->rowCount();
+        if (!$result){
+            throw new \Exception("There was an error!", 404);
+        }
+        return $result;
     }
 
 

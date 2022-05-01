@@ -2,7 +2,9 @@
 
 namespace app\controllers;
 
-use app\models\Cart;
+
+use app\models\entities\Cart;
+use app\models\repositories\CartRepository;
 
 class CartController extends Controller
 {
@@ -10,7 +12,7 @@ class CartController extends Controller
     public function actionIndex()
     {
         $session_id = session_id();
-        $cart = Cart::getCart($session_id);
+        $cart = (new CartRepository)->getCart($session_id);
         echo $this->render('cart',[
             "cart" => $cart
         ]);
@@ -20,11 +22,11 @@ class CartController extends Controller
         $session_id = session_id();
 
         $cart = new Cart($session_id, $id);
-        $cart->save();
+        (new CartRepository)->save($cart);
 
         $response = [
             "status" => "ok",
-            "count" => Cart::getCountWhere("sessionId", session_id())
+            "count" => (new CartRepository)->getCountWhere("sessionId", session_id())
         ];
 
         echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
@@ -35,8 +37,8 @@ class CartController extends Controller
 
         $response = [
             "status" => "ok",
-            "result" => Cart::staticDelete($id),
-            "count" => Cart::getCountWhere("sessionId", session_id())
+            "result" => (new CartRepository)->staticDelete($id),
+            "count" => (new CartRepository)->getCountWhere("sessionId", session_id())
         ];
 
         echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
