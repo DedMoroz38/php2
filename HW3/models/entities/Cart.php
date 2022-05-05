@@ -6,21 +6,18 @@ use app\models\Model;
 class Cart extends Model
 {
     protected $id;
-    protected $userId;
+    protected $sessionId;
     protected $itemId;
-    protected $orderId;
 
     protected $props = [
         'sessionId' => false,
-        'itemId' => false,
-        'orderId' => false
+        'itemId' => false
     ];
 
-    public function __construct($sessionId = null, $itemId = null, $orderId = null)
+    public function __construct($sessionId = null, $itemId = null)
     {
         $this->sessionId = $sessionId;
         $this->itemId = $itemId;
-        $this->orderId = $orderId;
     }
 
  }

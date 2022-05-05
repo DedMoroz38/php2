@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controllers;
+use app\engine\App;
 use app\models\repositories\UserRepository;
 
 class AuthController extends Controller
@@ -8,7 +9,7 @@ class AuthController extends Controller
     public function actionLogin(){
         $login = $_POST['login'];
         $password = $_POST['password'];
-        if ((new UserRepository())->Auth($login, $password)){
+        if (App::call()->userRepository->Auth($login, $password)){
             header("Location: /");
             die();
         } else {

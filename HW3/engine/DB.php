@@ -5,17 +5,20 @@ use app\traits\TSingletone;
 
 class DB 
 {
-    private $config = [
-        'driver' => 'mysql',
-        'host' => 'localhost',
-        'login' => 'root',
-        'password' => 'root',
-        'database' => 'Gallery',
-        'charset' => 'utf8'
-    ];
-    private $connection = null;
+    private $config;
 
-    use TSingletone;
+    private $connection = null; //PDO
+
+
+    public function __construct($driver = null, $host = null, $login = null, $password = null, $database = null, $charset = "utf8")
+    {
+        $this->config['driver'] = $driver;
+        $this->config['host'] = $host;
+        $this->config['login'] = $login;
+        $this->config['password'] = $password;
+        $this->config['database'] = $database;
+        $this->config['charset'] = $charset;
+    }
 
     private function getConnection()
     {
@@ -77,9 +80,9 @@ class DB
     public function execute($sql, $params = [])
     {
         $result =  $this->query($sql, $params)->rowCount();
-        if (!$result){
-            throw new \Exception("There was an error!", 404);
-        }
+//        if (!$result){
+//            throw new \Exception("There was an error!", 404);
+//        }
         return $result;
     }
 

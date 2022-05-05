@@ -2,27 +2,16 @@
 session_start();
 
 use app\engine\{Render, Request};
-include "../config/config.php";
+use \app\engine\App;
+//include "../config/config.php";
 //include "../engine/Autoload.php";
 //spl_autoload_register([new Autoload(), "loadClass"]);
 require_once "../vendor/autoload.php";
+$config = include "../config/config.php";
 
 
 try {
-    $request = new Request();
-
-    $controllerName = $request->getControllerName() ?: 'index';
-    $actionName = $request->getActionName();
-
-
-    $controllerClass = CONTROLLER_NAMESPACE . ucfirst($controllerName) . "Controller";
-
-    if (class_exists($controllerClass)) {
-        $controller = new $controllerClass(new Render());
-        $controller->runAction($actionName);
-    } else {
-        die("No such class");
-    }
+    App::call()->run($config);
 } catch (PDOException $exception) {
     var_dump($exception->getMessage());
 } catch (Exception $exception) {

@@ -21,6 +21,12 @@ class UserRepository extends Repository
     {
         return isset($_SESSION["login"]);
     }
+    public function isAdmin()
+    {
+//        var_dump($_SESSION["login"] === 'admin');
+//        die();
+        return $_SESSION["login"] === 'admin';
+    }
 
     public function getName()
     {
