@@ -12,4 +12,9 @@ if ($isAuth):?>
 
 <a href="/">Main</a>
 <a href="/product/catalog">Catalog</a>
-<a href="/cart/">Cart(<span id="count"><?=$count?></span>)</a><br>
+<?php
+if ($isAdmin):?>
+    <a href="/cart/">Orders</a><br>
+<?php else: ?>
+    <a href="/cart/">Cart(<span id="count"><?=$count?></span>)</a><br>
+<?php endif; ?><br>

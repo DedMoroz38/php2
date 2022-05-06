@@ -2,9 +2,7 @@
 
 namespace app\controllers;
 use app\interfaces\IRender;
-use app\models\repositories\UserRepository;
-use app\models\repositories\CartRepository;
-
+use app\engine\App;
 
 abstract class Controller
 {
@@ -32,9 +30,10 @@ abstract class Controller
     {
         return $this->renderTemplate('layouts/main', [
             'menu' => $this->renderTemplate('menu', [
-                "userName" => (new UserRepository())->getName(),
-                "isAuth" => (new UserRepository())->isAuth(),
-                "count" => (new CartRepository())->getCountWhere("sessionId", session_id())
+                "userName" => App::call()->userRepository->getName(),
+                "isAuth" => App::call()->userRepository->isAuth(),
+                "isAdmin" => App::call()->userRepository->isAdmin(),
+                "count" => App::call()->cartRepository->getCountWhere("sessionId", session_id())
             ]),
             'content' => $this->renderTemplate($template, $params)
         ]);

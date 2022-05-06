@@ -3,6 +3,7 @@ namespace app\models;
 
 use app\engine\DB;
 use app\interfaces\IRepository;
+use app\engine\App;
 
 
 abstract class Repository implements IRepository
@@ -22,10 +23,9 @@ abstract class Repository implements IRepository
         $tableName = $this->getTableName();
 
         $sql = "INSERT INTO `$tableName` ($variables) VALUES ($values)";
-        DB::getInstance()->execute($sql, $params);
-        $entity->id = Db::getInstance()->lastInsertId();
+        App::call()->db->execute($sql, $params);
+        $entity->id = App::call()->db->lastInsertId();
         return $this;
-
     }
 
     public function update(Model $entity){
@@ -45,7 +45,7 @@ abstract class Repository implements IRepository
         $tableName = $this->getTableName();
 
         $sql = "UPDATE `$tableName` SET $variables WHERE `id` = $entity->id";
-        DB::getInstance()->execute($sql, $params);
+        App::call()->db->execute($sql, $params);
         return $this;
     }
 
@@ -59,38 +59,38 @@ abstract class Repository implements IRepository
     public function getWhere($name, $value){
         $tableName = $this->getTableName();
         $sql = "SELECT * FROM `{$tableName}` WHERE `{$name}` = :value";
-        return DB::getInstance()->queryOneObject($sql, ['value' => $value], $this->getEntityName());
+        return App::call()->db->queryOneObject($sql, ['value' => $value], $this->getEntityName());
     }
 
     public function getCountWhere($name, $value) {
         $tableName = $this->getTableName();
         $sql = "SELECT count(id) as count FROM {$tableName} WHERE {$name} = :value";
-        return Db::getInstance()->queryOne($sql, ['value' => $value])['count'];
+        return App::call()->db->queryOne($sql, ['value' => $value])['count'];
     }
 
     public function staticDelete($id){
         $tableName = $this->getTableName();
         $sql = "DELETE FROM `{$tableName}` WHERE `id` = :id";
-        return DB::getInstance()->execute($sql, ['id' => $id]);
+        return App::call()->db->execute($sql, ['id' => $id]);
     }
 
     public function delete(Model $entity){
         $sql = "DELETE FROM `{$this->getTableName()}` WHERE `id` = :id";
-        return DB::getInstance()->execute($sql, ['id' => $entity->id]);
+        return App::call()->db->execute($sql, ['id' => $entity->id]);
     }
     public function getOne(int $id){
         $tableName = $this->getTableName();
         $sql = "SELECT * FROM `{$tableName}` WHERE `id` = :id";
-        return DB::getInstance()->queryOneObject($sql, ['id' => $id], $this->getEntityName());
+        return App::call()->db->queryOneObject($sql, ['id' => $id], $this->getEntityName());
     }
     public function getAll(){
         $tableName = $this->getTableName();
         $sql = "SELECT * FROM `{$tableName}`";
-        return DB::getInstance()->queryAll($sql);
+        return App::call()->db->queryAll($sql);
     }
     public function getLimit($limit, $offset){
         $tableName = $this->getTableName();
         $sql = "SELECT * FROM `{$tableName}` LIMIT $limit OFFSET $offset";
-        return DB::getInstance()->queryAll($sql);
+        return App::call()->db->queryAll($sql);
     }
 }
