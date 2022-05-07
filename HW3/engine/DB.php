@@ -56,15 +56,15 @@ class DB
         return $STH;
     }
 
-    public function queryOne($sql, $params)
+    public function queryOne($sql, $params = [])
     {
         return $this->query($sql, $params)->fetch();
     }
-    public function queryAll($sql)
+    public function queryAll($sql, $params = [])
     {
         return $this->query($sql, $params)->fetchAll();
     }
-    public function execute($sql, $params)
+    public function execute($sql, $params = [])
     {
         return $this->query($sql, $params)->rowCount();
     }

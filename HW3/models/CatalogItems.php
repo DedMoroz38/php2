@@ -2,7 +2,7 @@
 namespace app\models;
 
 
-class CatalogItems extends Model 
+class CatalogItems extends DBModel 
 {
     public $id;
     public $name;
@@ -18,7 +18,7 @@ class CatalogItems extends Model
         $this->price = $price;
     }
 
-    public function getTableName(){
+    public static function getTableName(){
         return "catalogItems";
     }
  }

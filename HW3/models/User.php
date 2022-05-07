@@ -3,7 +3,7 @@ namespace app\models;
 
 
 
-class User extends Model
+class User extends DBModel
 {
 
     public $id;
@@ -18,7 +18,7 @@ class User extends Model
         $this->hash = $hash;
     }
 
-    public function getTableName(){
+    public static function getTableName(){
         return "users";
     }
 }
